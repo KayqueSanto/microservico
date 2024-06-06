@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastros</title>
+    <link rel="stylesheet" href="style.css">
+     <link rel="shortcut icon" href="https://static.mundoeducacao.uol.com.br/mundoeducacao/2023/01/simbolo-da-arroba.jpgcle">
+</head>
+<body>
+    <h1>Cadastros de Usuários e Produtos</h1>
+
+    <h2>Criar Usuário</h2>
+    <form id="userForm">
+        <label for="userId">ID:</label>
+        <input type="text" id="userId" name="userId" required>
+        <label for="userName">Nome:</label>
+        <input type="text" id="userName" name="userName" required>
+        <button type="submit">Criar Usuário</button>
+    </form>
+    <p id="userMessage" class="success-message"></p>
+
+    <h2>Criar Produto</h2>
+    <form id="productForm">
+        <label for="productId">ID:</label>
+        <input type="text" id="productId" name="productId" required>
+        <label for="productName">Nome:</label>
+        <input type="text" id="productName" name="productName" required>
+        <button type="submit">Criar Produto</button>
+    </form>
+    <p id="productMessage" class="success-message"></p>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userId = document.getElementById('userId').value;
+            const userName = document.getElementById('userName').value;
+
+            fetch('/create-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: userId, name: userName })
+            }).then(response => response.text())
+              .then(data => {
+                  console.log(data);
+                  const userMessage = document.getElementById('userMessage');
+                  userMessage.textContent = 'USUÁRIO CRIADO COM SUCESSO!';
+                  userMessage.style.display = 'inline-block'; // Mostra a mensagem
+                  document.getElementById('userForm').reset();
+              })
+              .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const productId = document.getElementById('productId').value;
+            const productName = document.getElementById('productName').value;
+
+            fetch('/create-product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: productId, name: productName })
+            }).then(response => response.text())
+              .then(data => {
+                  console.log(data);
+                  const productMessage = document.getElementById('productMessage');
+                  productMessage.textContent = 'PRODUTO CRIADO COM SUCESSO!';
+                  productMessage.style.display = 'inline-block'; // Mostra a mensagem
+                  document.getElementById('productForm').reset();
+              })
+              .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
